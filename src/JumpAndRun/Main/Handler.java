@@ -57,18 +57,31 @@ public class Handler {
         int width = level.getWidth();
         int height = level.getHeight();
 
-        for (int y=0;y<height;y++) {
-            for (int x=0;x < width;x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 int pixel = level.getRGB(x,y);
 
                 int red = (pixel >> 16) & 0xff;
                 int green = (pixel >> 8) & 0xff;
                 int blue = (pixel) & 0xff;
 
-                if (red==0&&green==0&&blue==0) addTile(new Wall(x*64, y*64,64,64,true, Id.wall,this));
-                if (red==0&&green==0&&blue==255) addEntity(new Player(x*64,y*64,64,64,false,Id.player,this));
-                if (red==255&&green==119&&blue==0) addEntity(new mini(x*64,y*64,64,64,true,Id.mini,this));
-                if (red==255&&green==0&&blue==255) addEntity(new EndBoss(x*64,y*64,64,64,Id.endboss,this));
+                if (red==0&&green==0&&blue==0) 
+                    addTile(new Wall(x*64, y*64,64,64,true, Id.wall,this));
+
+                if (red==0&&green==0&&blue==255) 
+                    addEntity(new Player.Builder(x*64,y*64,64,64,Id.player,this)
+                        .solid(false)
+                        .build());
+                        
+                if (red==255&&green==119&&blue==0) 
+                    addEntity(new mini.Builder(x*64,y*64,64,64,Id.mini,this)
+                        .solid(true)
+                        .build());
+
+                if (red==255&&green==0&&blue==255) 
+                    addEntity(new EndBoss.Builder(x*64,y*64,64,64,Id.endboss,this)
+                        .hp(1000)
+                        .build());
             }
         }
     }

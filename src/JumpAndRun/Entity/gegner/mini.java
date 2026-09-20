@@ -16,11 +16,9 @@ public class mini extends Entity {
 
     private Random random = new Random();
 
-    public mini(int x, int y, int width, int height, boolean solid, Id id, Handler handler) {
-        super(x, y, width, height, id, handler);
-
+    private mini(Builder builder) {
+        super(builder);
         int dir = random.nextInt(2);
-
         switch (dir) {
             case 0:
                 setVelX(-2);
@@ -33,6 +31,7 @@ public class mini extends Entity {
         }
     }
 
+    @Override 
     public void render(Graphics g) {
         if (facing == 0) {
             g.drawImage(Main.mini[frame+5].getBufferedImage(), x, y, width, height, null);
@@ -41,6 +40,7 @@ public class mini extends Entity {
         }
     }
 
+    @Override 
     public void tick() {
         x+=velX;
         y+=velY;
@@ -80,6 +80,22 @@ public class mini extends Entity {
                 }
                 frameDelay = 0;
             }
+        }
+    }
+
+    public static class Builder extends Entity.Builder<Builder> {
+        public Builder(int x, int y, int width, int height, Id id, Handler handler) {
+            super(x, y, width, height, id, handler);
+        }
+
+        @Override 
+        public mini build() {
+            return new mini(this);
+        }
+
+        @Override 
+        protected Builder self() {
+            return this;
         }
     }
 }

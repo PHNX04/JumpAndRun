@@ -15,11 +15,12 @@ public class Player extends Entity {
 
     private boolean animate = false;
 
-    public Player(int x, int y, int width, int height, boolean solid, Id id, Handler handler) {
-        super(x, y, width, height, id, handler);
+    private Player(Builder builder) {
+        super(builder);
         setVelX(5);
     }
 
+    @Override 
     public void render(Graphics g) {
         if (facing == 0) {
             g.drawImage(Main.player[frame+5].getBufferedImage(), x, y, width, height, null);
@@ -28,6 +29,7 @@ public class Player extends Entity {
         }
     }
 
+    @Override 
     public void tick() {
         x += velX;
         y += velY;
@@ -101,6 +103,22 @@ public class Player extends Entity {
                 }
                 frameDelay = 0;
             }
+        }
+    }
+
+    public static class Builder extends Entity.Builder<Builder> {
+        public Builder(int x, int y, int width, int height, Id id, Handler handler) {
+            super(x, y, width, height, id, handler);
+        }
+
+        @Override 
+        public Player build() {
+            return new Player(this);
+        }
+
+        @Override 
+        protected Builder self() {
+            return this;
         }
     }
 }

@@ -9,34 +9,32 @@ import java.awt.*;
 
 public abstract class Entity {
     public int x, y;
-    public int width, height;
+    
+    public final int width, height;
+    public final Id id;
+    public final Handler handler;
+    public final boolean solid;
+    
     public int facing = 0;
     public int hp;
     public int phaseTime;
-
-    public boolean solid;
     public boolean jumping = false;
     public boolean falling = true;
-
     public int velX, velY;
-
-    public Id id;
     public BossState bossstate;
-
     public boolean attackable = false;
-
     public double gravity = 0.0;
 
-    public Handler handler;
-
-    public Entity(int x, int y, int width, int height, Id id, Handler handler) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.solid = solid;
-        this.id = id;
-        this.handler = handler;
+    public Entity(Builder<?> builder) {
+        this.x = builder.x;
+        this.y = builder.y;
+        this.width = builder.width;
+        this.height = builder.height;
+        this.id = builder.id;
+        this.handler = builder.handler;
+        this.solid = builder.solid;
+        this.hp = builder.hp;
+        this.attackable = builder.attackable;
     }
 
     public abstract void render(Graphics g);
@@ -56,16 +54,8 @@ public abstract class Entity {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public Id getId() {
@@ -74,10 +64,6 @@ public abstract class Entity {
 
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public void setVelY(int velY) {
@@ -110,5 +96,44 @@ public abstract class Entity {
 
     public Rectangle getBoundsRight() {
         return new Rectangle(getX()+width-5, getY()+10, 5, height-20);
+    }
+
+    public abstract static class Builder<T extends Builder<T>> {
+        private final int x, y;
+        private final int width, height;
+        private final Id id;
+        private final Handler handler;
+
+        private boolean solid = false;
+        private int hp = 0;
+        private boolean attackable = false;
+
+        public Builder(int x, int y, int width, int height, Id id, Handler handler) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.id = id;
+            this.handler = handler;
+        }
+
+        public T solid(boolean val) {
+            solid = val;
+            return self();
+        }
+
+        public T hp(int val) {
+            hp = val;
+            return self();
+        }
+
+        public T attackable(boolean val) {
+            attackable = val;
+            return self();
+        }
+
+        public abstract Entity build();
+
+        protected abstract T self();
     }
 }

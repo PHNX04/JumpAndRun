@@ -16,6 +16,13 @@ public class EndBoss extends Entity {
 
     private Random random;
 
+    private EndBoss(Builder builder) {
+        super(builder);
+        bossstate = BossState.IDLE;
+        random = new Random();
+    }
+
+    /* 
     public EndBoss(int x, int y, int width, int height, Id id, Handler handler) {
         super(x, y, width, height, id, handler);
         this.hp = hp;
@@ -23,7 +30,7 @@ public class EndBoss extends Entity {
         bossstate = BossState.IDLE;
 
         random = new Random();
-    }
+    } */
 
     @Override
     public void render(Graphics g) {
@@ -142,5 +149,21 @@ public class EndBoss extends Entity {
         }
 
         phaseTime = 0;
+    }
+
+    public static class Builder extends Entity.Builder<Builder> {
+        public Builder(int x, int y, int width, int height, Id id, Handler handler) {
+            super(x, y, width, height, id, handler);
+        }
+
+        @Override 
+        public EndBoss build() {
+            return new EndBoss(this);
+        }
+
+        @Override 
+        protected Builder self() {
+            return this;
+        }
     }
 }
