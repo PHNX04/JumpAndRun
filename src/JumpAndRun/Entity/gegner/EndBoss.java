@@ -22,16 +22,6 @@ public class EndBoss extends Entity {
         random = new Random();
     }
 
-    /* 
-    public EndBoss(int x, int y, int width, int height, Id id, Handler handler) {
-        super(x, y, width, height, id, handler);
-        this.hp = hp;
-
-        bossstate = BossState.IDLE;
-
-        random = new Random();
-    } */
-
     @Override
     public void render(Graphics g) {
         if (bossstate==BossState.IDLE||bossstate==BossState.SPINNING) g.setColor(Color.GRAY);
@@ -65,7 +55,7 @@ public class EndBoss extends Entity {
             jumpTime = 0;
         }
 
-        if (addJumpTime=true) {
+        if (addJumpTime==true) {
             jumpTime++;
             if (jumpTime>=30) {
                 addJumpTime = false;
