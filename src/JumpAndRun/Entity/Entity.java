@@ -88,7 +88,7 @@ public abstract class Entity {
   }
 
   public Rectangle getBoundsBottom() {
-    return new Rectangle(getX(), getY() + height - 5, width - 20, 5);
+    return new Rectangle(getX() + 10, getY() + height - 5, width - 20, 5);
   }
 
   public Rectangle getBoundsLeft() {
