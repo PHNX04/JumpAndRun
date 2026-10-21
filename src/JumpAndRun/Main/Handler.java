@@ -14,13 +14,15 @@ public class Handler {
   public LinkedList<Entity> entity = new LinkedList<Entity>();
   public LinkedList<Tile> tile = new LinkedList<Tile>();
 
-  public void render(Graphics g) {
-    for (Entity en : entity) {
-      en.render(g);
-    }
+  public int levelHeight;
 
+  public void render(Graphics g) {
     for (Tile ti : tile) {
       ti.render(g);
+    }
+
+    for (Entity en : entity) {
+      en.render(g);
     }
   }
 
@@ -55,6 +57,7 @@ public class Handler {
   public void createLevel(BufferedImage level) {
     int width = level.getWidth();
     int height = level.getHeight();
+    int lowest = 0;
 
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
@@ -64,8 +67,12 @@ public class Handler {
         int green = (pixel >> 8) & 0xff;
         int blue = (pixel) & 0xff;
 
-        if (red == 0 && green == 0 && blue == 0)
+        if (red == 0 && green == 0 && blue == 0) {
           addTile(new Wall(x * 64, y * 64, 64, 64, true, Id.wall, this));
+          if (y > lowest) {
+            lowest = y;
+          }
+        }
 
         if (red == 0 && green == 0 && blue == 255)
           addEntity(
@@ -78,6 +85,7 @@ public class Handler {
           addEntity(new EndBoss.Builder(x * 64, y * 64, 64, 64, Id.endboss, this).hp(1000).build());
       }
     }
+    levelHeight = lowest * 64;
   }
 
   public void clearlevel() {

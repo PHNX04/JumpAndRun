@@ -31,9 +31,15 @@ public class Player extends Entity {
   public void tick() {
     x += velX;
     y += velY;
-    if (y + height >= 771) y = 771 - height;
-    if (velX != 0) animate = true;
-    else animate = false;
+    if (y >= handler.levelHeight + height * 4) {
+      die();
+    }
+    if (velX != 0) {
+      animate = true;
+    } else {
+      animate = false;
+    }
+
     boolean onGround = false;
 
     for (int i = 0; i < handler.tile.size(); i++) {
