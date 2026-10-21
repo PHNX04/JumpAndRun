@@ -44,15 +44,14 @@ public class mini extends Entity {
     x += velX;
     y += velY;
 
+    boolean onGround = false;
+
     for (int i = 0; i < handler.tile.size(); i++) {
       Tile t = handler.tile.get(i);
       if (t.isSolid()) {
         if (getBoundsBottom().intersects(t.getBounds())) {
           setVelY(0);
-          if (falling) falling = false;
-        } else if (!falling) {
-          falling = true;
-          gravity = 0.8;
+          onGround = true;
         }
         if (getBoundsLeft().intersects(t.getBounds())) {
           setVelX(2);
@@ -63,6 +62,13 @@ public class mini extends Entity {
           facing = 0;
         }
       }
+    }
+
+    if (onGround) {
+      falling = false;
+    } else if (!falling) {
+      falling = true;
+      gravity = 0.8;
     }
 
     if (falling) {
