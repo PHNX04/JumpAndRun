@@ -16,7 +16,6 @@ public class Player extends Entity {
 
   private Player(Builder builder) {
     super(builder);
-    setVelX(5);
   }
 
   @Override

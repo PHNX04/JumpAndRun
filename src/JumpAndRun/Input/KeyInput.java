@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyInput implements KeyListener {
+  private boolean left = false;
+  private boolean right = false;
 
   public void keyTyped(KeyEvent e) {
     // wird nicht benutzt
@@ -25,13 +27,20 @@ public class KeyInput implements KeyListener {
             }
             break;
           case KeyEvent.VK_A:
-            en.setVelX(-5);
-            en.facing = 0;
+            left = true;
             break;
           case KeyEvent.VK_D:
-            en.setVelX(5);
-            en.facing = 1;
+            right = true;
             break;
+        }
+        if (left && !right) {
+          en.setVelX(-5);
+          en.facing = 0;
+        } else if (right && !left) {
+          en.setVelX(5);
+          en.facing = 1;
+        } else {
+          en.setVelX(0);
         }
       }
     }
@@ -50,11 +59,20 @@ public class KeyInput implements KeyListener {
             en.setVelY(0);
             break;
           case KeyEvent.VK_A:
-            en.setVelX(0);
+            left = false;
             break;
           case KeyEvent.VK_D:
-            en.setVelX(0);
+            right = false;
             break;
+        }
+        if (!left && !right) {
+          en.setVelX(0);
+        } else if (!left && right) {
+          en.setVelX(5);
+          en.facing = 1;
+        } else if (!right && left) {
+          en.setVelX(-5);
+          en.facing = 0;
         }
       }
     }
