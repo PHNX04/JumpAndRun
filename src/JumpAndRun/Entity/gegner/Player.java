@@ -78,6 +78,7 @@ public class Player extends Entity {
           e.die();
         } else if (getBounds().intersects(e.getBounds())) {
           die();
+          break;
         }
       }
     }
