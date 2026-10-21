@@ -94,7 +94,7 @@ public class EndBoss extends Entity {
         if (getBoundsRight().intersects(t.getBounds())) {
           setVelX(0);
           if (bossstate == BossState.RUNNING) setVelX(-4);
-          x = t.getX() - t.width;
+          x = t.getX() - width;
         }
       }
     }
