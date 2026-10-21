@@ -13,6 +13,7 @@ import java.util.LinkedList;
 public class Handler {
   public LinkedList<Entity> entity = new LinkedList<Entity>();
   public LinkedList<Tile> tile = new LinkedList<Tile>();
+  private LinkedList<Entity> deadEntities = new LinkedList<Entity>();
 
   public int levelHeight;
 
@@ -32,6 +33,13 @@ public class Handler {
       en.tick();
     }
 
+    for (int i = 0; i < deadEntities.size(); i++) {
+      Entity den = deadEntities.get(i);
+      entity.remove(den);
+    }
+
+    deadEntities.clear();
+
     for (int i = 0; i < tile.size(); i++) {
       Tile ti = tile.get(i);
       ti.tick();
@@ -43,7 +51,7 @@ public class Handler {
   }
 
   public void removeEntity(Entity en) {
-    entity.remove(en);
+    deadEntities.add(en);
   }
 
   public void addTile(Tile ti) {
@@ -91,5 +99,6 @@ public class Handler {
   public void clearlevel() {
     entity.clear();
     tile.clear();
+    deadEntities.clear();
   }
 }
