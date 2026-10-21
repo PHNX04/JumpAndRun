@@ -2,80 +2,79 @@ package JumpAndRun.tile;
 
 import JumpAndRun.Main.Handler;
 import JumpAndRun.Main.Id;
-
 import java.awt.*;
 
 public abstract class Tile {
-    public int x, y;
-    public int width, height;
+  public int x, y;
+  public int width, height;
 
-    public boolean solid;
+  public boolean solid;
 
-    public int velX, velY;
+  public int velX, velY;
 
-    public Id id;
+  public Id id;
 
-    public Handler handler;
+  public Handler handler;
 
-    public Tile(int x, int y, int width, int height, boolean solid, Id id, Handler handler) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.solid = solid;
-        this.id = id;
-        this.handler = handler;
-    }
+  public Tile(int x, int y, int width, int height, boolean solid, Id id, Handler handler) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.solid = solid;
+    this.id = id;
+    this.handler = handler;
+  }
 
-    public abstract void render(Graphics g);
-    public abstract void tick();
+  public abstract void render(Graphics g);
 
-    public void die() {
-        handler.removeTile(this);
-    }
+  public abstract void tick();
 
-    public int getX() {
-        return x;
-    }
+  public void die() {
+    handler.removeTile(this);
+  }
 
-    public void setX(int x) {
-        this.x = x;
-    }
+  public int getX() {
+    return x;
+  }
 
-    public Id getId() {
-        return id;
-    }
+  public void setX(int x) {
+    this.x = x;
+  }
 
-    public int getHeight() {
-        return height;
-    }
+  public Id getId() {
+    return id;
+  }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+  public int getHeight() {
+    return height;
+  }
 
-    public void setVelY(int velY) {
-        this.velY = velY;
-    }
+  public void setHeight(int height) {
+    this.height = height;
+  }
 
-    public void setVelX(int velX) {
-        this.velX = velX;
-    }
+  public void setVelY(int velY) {
+    this.velY = velY;
+  }
 
-    public int getY() {
-        return y;
-    }
+  public void setVelX(int velX) {
+    this.velX = velX;
+  }
 
-    public void setY(int y) {
-        this.y = y;
-    }
+  public int getY() {
+    return y;
+  }
 
-    public boolean isSolid() {
-        return solid;
-    }
+  public void setY(int y) {
+    this.y = y;
+  }
 
-    public Rectangle getBounds() {
-        return new Rectangle(getX(), getY(), width, height);
-    }
+  public boolean isSolid() {
+    return solid;
+  }
+
+  public Rectangle getBounds() {
+    return new Rectangle(getX(), getY(), width, height);
+  }
 }
-

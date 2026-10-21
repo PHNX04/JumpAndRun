@@ -1,5 +1,8 @@
 package JumpAndRun.Main;
 
 public enum Id {
-    player, wall, mini, endboss;
+  player,
+  wall,
+  mini,
+  endboss;
 }
