@@ -102,15 +102,17 @@ public class Player extends Entity {
       setVelY((int) gravity);
     }
 
-    if (velX != 0) {
+    if (animate) {
       frameDelay++;
       if (frameDelay >= 3) {
         frame++;
-        if (frame >= 5) {
+        if (frame >= 4) {
           frame = 0;
         }
         frameDelay = 0;
       }
+    } else {
+      frame = 4;    
     }
   }
 
