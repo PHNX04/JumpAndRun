@@ -9,11 +9,13 @@ import JumpAndRun.tile.Wall;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import java.util.HashSet;
 
 public class Handler {
   public LinkedList<Entity> entity = new LinkedList<Entity>();
   public LinkedList<Tile> tile = new LinkedList<Tile>();
   private LinkedList<Entity> deadEntities = new LinkedList<Entity>();
+  private HashSet<Long> solidTiles = new HashSet<Long>();
 
   public int levelHeight;
 
@@ -56,10 +58,22 @@ public class Handler {
 
   public void addTile(Tile ti) {
     tile.add(ti);
+    if (ti.isSolid()) {
+      solidTiles.add(key(Math.floorDiv(ti.getX(), 64), Math.floorDiv(ti.getY(), 64)));
+    }
   }
 
   public void removeTile(Tile ti) {
     tile.remove(ti);
+    solidTiles.remove(key(Math.floorDiv(ti.getX(), 64), Math.floorDiv(ti.getY(), 64)));
+  }
+
+  private static long key(int col, int row) {
+    return ((long) col << 32 | row & 0xFFFFFFFFL);
+  }
+
+  public boolean isSolidAt(int col, int row) {
+    return solidTiles.contains(key(col, row));
   }
 
   public void createLevel(BufferedImage level) {
@@ -87,10 +101,10 @@ public class Handler {
               new Player.Builder(x * 64, y * 64, 64, 64, Id.player, this).solid(false).build());
 
         if (red == 255 && green == 119 && blue == 0)
-          addEntity(new mini.Builder(x * 64, y * 64, 64, 64, Id.mini, this).solid(true).build());
+          addEntity(new mini.Builder(x * 64, y * 64, 64, 64, Id.mini, this).solid(true).hp(2).build());
 
         if (red == 255 && green == 0 && blue == 255)
-          addEntity(new EndBoss.Builder(x * 64, y * 64, 64, 64, Id.endboss, this).hp(1000).build());
+          addEntity(new EndBoss.Builder(x * 64, y * 64, 64, 64, Id.endboss, this).hp(10).build());
       }
     }
     levelHeight = lowest * 64;
@@ -100,5 +114,6 @@ public class Handler {
     entity.clear();
     tile.clear();
     deadEntities.clear();
+    solidTiles.clear();
   }
 }

@@ -34,14 +34,43 @@ public class Player extends Entity {
 
     if (velY >= 0) {
       Rectangle sweep = new Rectangle(x + 10, y + height, width - 20, Math.max(velY, 1));
+
+      int left = Math.floorDiv(x + 10, 64);
+      int right = Math.floorDiv(x + width - 11, 64);
+      int top = Math.floorDiv(y + height, 64);
+      int bottom = Math.floorDiv(y + height + Math.max(velY, 1) - 1, 64);
+
       int landY = -1;
-      for (int i = 0; i < handler.tile.size(); i++) {
-        Tile t = handler.tile.get(i);
-        if (t.isSolid() && sweep.intersects(t.getBounds()) && (landY == -1 || t.getY() < landY)) {
-          landY = t.getY();
+      for (int row = top; row <= bottom && landY == -1; row++) {
+        for (int col = left; col <= right; col++) {
+          if (handler.isSolidAt(col, row)) {
+            landY = row * 64;
+            break;
+          }
         }
       }
-      if (landY != -1 ) {
+
+      Entity hit = null;
+      if (velY >= 0) {
+        for (int i = 0; i < handler.entity.size(); i++) {
+          Entity e = handler.entity.get(i);
+          if (e.getId() == Id.mini && e.getY() >= y + height && sweep.intersects(e.getBounds()) && (hit == null || e.getY() < hit.getY())) {
+            hit = e;
+          }
+        }
+      }
+
+      if (hit != null && (landY == -1 || hit.getY() < landY)) {
+        y = hit.getY() - height;
+        hit.hp -= stomping ? 2 : 1;
+        if (hit.hp <= 0) {
+          hit.die();
+        }
+        jumping = true;
+        falling = false;
+        stomping = false;
+        gravity = 5.0;
+      } else if (landY != -1 ) {
         y = landY - height;
         setVelY(0);
         onGround = true;
@@ -60,8 +89,6 @@ public class Player extends Entity {
     } else {
       animate = false;
     }
-
-
 
     for (int i = 0; i < handler.tile.size(); i++) {
       Tile t = handler.tile.get(i);
@@ -97,9 +124,7 @@ public class Player extends Entity {
       Entity e = handler.entity.get(i);
 
       if (e.getId() == Id.mini) {
-        if (getBoundsBottom().intersects(e.getBoundsTop())) {
-          e.die();
-        } else if (getBounds().intersects(e.getBounds())) {
+        if (getBounds().intersects(e.getBounds())) {
           die();
           break;
         }
