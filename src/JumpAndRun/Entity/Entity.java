@@ -16,6 +16,7 @@ public abstract class Entity {
   public int facing = 0;
   public int hp;
   public int phaseTime;
+  public boolean stomping = false;
   public boolean jumping = false;
   public boolean falling = true;
   public int velX, velY;

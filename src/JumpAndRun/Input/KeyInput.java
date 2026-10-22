@@ -21,7 +21,7 @@ public class KeyInput implements KeyListener {
       if (en.getId() == Id.player) {
         switch (key) {
           case KeyEvent.VK_W:
-            if (!en.jumping && !en.falling) {
+            if (!en.jumping && !en.falling && !en.stomping) {
               en.jumping = true;
               en.gravity = 10.0;
             }
@@ -31,6 +31,12 @@ public class KeyInput implements KeyListener {
             break;
           case KeyEvent.VK_D:
             right = true;
+            break;
+          case KeyEvent.VK_S:
+            if (!en.stomping) {
+              en.jumping = false;
+              en.stomping = true;
+            }
             break;
         }
         if (left && !right) {

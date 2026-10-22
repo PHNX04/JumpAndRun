@@ -29,8 +29,29 @@ public class Player extends Entity {
 
   @Override
   public void tick() {
+    boolean onGround = false;
     x += velX;
-    y += velY;
+
+    if (velY >= 0) {
+      Rectangle sweep = new Rectangle(x + 10, y + height, width - 20, Math.max(velY, 1));
+      int landY = -1;
+      for (int i = 0; i < handler.tile.size(); i++) {
+        Tile t = handler.tile.get(i);
+        if (t.isSolid() && sweep.intersects(t.getBounds()) && (landY == -1 || t.getY() < landY)) {
+          landY = t.getY();
+        }
+      }
+      if (landY != -1 ) {
+        y = landY - height;
+        setVelY(0);
+        onGround = true;
+      } else {
+        y += velY;
+      }
+    } else {
+      y += velY;
+    }
+
     if (y >= handler.levelHeight + height * 4) {
       die();
     }
@@ -40,7 +61,7 @@ public class Player extends Entity {
       animate = false;
     }
 
-    boolean onGround = false;
+
 
     for (int i = 0; i < handler.tile.size(); i++) {
       Tile t = handler.tile.get(i);
@@ -52,10 +73,6 @@ public class Player extends Entity {
             gravity = 0.8;
             falling = true;
           }
-        }
-        if (getBoundsBottom().intersects(t.getBounds())) {
-          setVelY(0);
-          onGround = true;
         }
         if (getBoundsLeft().intersects(t.getBounds())) {
           setVelX(0);
@@ -70,6 +87,7 @@ public class Player extends Entity {
 
     if (onGround) {
       falling = false;
+      stomping = false;
     } else if (!falling && !jumping) {
       falling = true;
       gravity = 0.8;
@@ -97,8 +115,13 @@ public class Player extends Entity {
       }
     }
 
-    if (falling) {
+    if (falling && !stomping) {
       gravity += 0.15;
+      setVelY((int) gravity);
+    }
+
+    if (stomping) {
+      gravity += 1.5;
       setVelY((int) gravity);
     }
 
